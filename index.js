@@ -115,10 +115,10 @@ function buildOverrideMessage() {
  * to any app instance subscribed to the news topic.
  */
 
-function buildCommonMessage() {
+function buildCommonMessage(token) {
   return {
     'message': {
-      'token': process.argv[2],
+      'token': token,
       // 'topic': 'news',
       'notification': {
         'title': 'FCM Notification',
@@ -130,8 +130,18 @@ function buildCommonMessage() {
 
 //dogObMf6SZScoeElp3hHQk:APA91bHigTeUIYh24sbR_ZFtoMzIfV1S4xeUWd97s5nTpjNt4pZVg_opc3lEBU6vWaYgbirHvm5E_veZ-brbqg6KvjMqQ7osEGVRW1sKuPyeOlHE_RFc8z7EjaeINYB6v6YSSw2GS0hI
 
-  const commonMessage = buildCommonMessage();
-  console.log('FCM request body for message using common notification object:');
-  console.log(JSON.stringify(commonMessage, null, 2));
-  sendFcmMessage(buildCommonMessage());
 
+ 
+
+  appExpress.post("/message/", function(req, res){
+    sendFcmMessage(buildCommonMessage());   
+    const commonMessage = buildCommonMessage(req.body.token);
+    console.log('FCM request body for message using common notification object:');
+    console.log(JSON.stringify(commonMessage, null, 2));
+});
+
+
+
+appExpress.listen(3005, function(){
+    console.log("Сервер ожидает подключения...");
+});
